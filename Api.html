@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Envio para WhatsApp</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, rgba(0, 100, 255, 0.6) 0%, rgba(255, 0, 0, 0.6) 100%);
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: rgba(0, 100, 255, 0.8);
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: rgba(255, 0, 0, 0.8);
+        }
+
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 320px;
+            display: none;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        input {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        input:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        .error {
+            color: red;
+            font-size: 12px;
+        }
+
+        .container button {
+            width: 100%;
+            padding: 10px;
+            background-color: rgba(0, 100, 255, 0.8);
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .container button:hover {
+            background-color: rgba(255, 0, 0, 0.8);
+        }
+    </style>
+</head>
+
+<body>
+    <h1>UNIÃO SUPERMERCADOS<br>LANÇAMENTO DE NOTAS</h1>
+    <div class="button-group">
+        <button onclick="mostrarFormulario('cupom')">Lançamento de Cupom</button>
+        <button onclick="mostrarFormulario('notinha')">Lançamento de Notinha Branca</button>
+    </div>
+    <div class="container" id="form-container">
+        <h2 id="titulo-form">Preencha os Dados</h2>
+        <input type="number" id="cod" placeholder="Cod">
+        <input type="text" id="nome" placeholder="Nome" pattern="[A-Za-zÀ-ÿ\s]+">
+        <input type="date" id="data">
+        <input type="number" id="coo" placeholder="Coo" class="cupom">
+        <input type="text" id="operadora" placeholder="Operadora" class="cupom" pattern="[A-Za-zÀ-ÿ\s]+">
+        <input type="number" id="ecf" placeholder="Ecf" min="100" max="999">
+        <input type="number" step="0.01" id="valor" placeholder="Valor" onblur="formatarValor()">
+        <span id="error-ecf" class="error"></span>
+        <button onclick="enviarWhatsApp()">Enviar</button>
+    </div>
+
+    <script>
+        function mostrarFormulario(tipo) {
+            document.getElementById("form-container").style.display = "block";
+            if (tipo === 'cupom') {
+                document.getElementById("titulo-form").innerText = "Lançamento de Cupom";
+                document.querySelectorAll(".cupom").forEach(el => el.style.display = "block");
+            } else {
+                document.getElementById("titulo-form").innerText = "Lançamento de Notinha Branca";
+                document.querySelectorAll(".cupom").forEach(el => el.style.display = "none");
+            }
+        }
+
+        function formatarValor() {
+            let valor = document.getElementById("valor");
+            if (valor.value) {
+                valor.value = parseFloat(valor.value).toFixed(2);
+            }
+        }
+
+        function enviarWhatsApp() {
+            let cod = document.getElementById("cod").value;
+            let nome = document.getElementById("nome").value;
+            let data = document.getElementById("data").value;
+            let valor = document.getElementById("valor").value;
+
+            let ecf = document.getElementById("ecf").value;
+
+            if (!cod || !nome || !data || !valor) {
+                alert("Por favor, preencha todos os campos obrigatórios.");
+                return;
+            }
+             
+
+            if (ecf.toString().length !== 3 && document.getElementById("titulo-form").innerText === "Lançamento de Cupom") {
+                document.getElementById("error-ecf").innerText = "O ECF deve ter exatamente 3 números";
+                return;
+            } else {
+                document.getElementById("error-ecf").innerText = "";
+            }
+
+            let mensagem = "";
+            if (document.getElementById("titulo-form").innerText === "Lançamento de Cupom") {
+                let coo = document.getElementById("coo").value;
+                let operadora = document.getElementById("operadora").value;
+                mensagem = `Lançamento de Cupom Fiscal%0A` +
+                    `Cod: ${cod}%0A` +
+                    `Nome: ${nome}%0A` +
+                    `Data: ${data}%0A` +
+                    `Coo: ${coo}%0A` +
+                    `Operadora: ${operadora}%0A` +
+                    `Ecf: ${ecf}%0A` +
+                    `Valor: R$ ${valor}`;
+            } else {
+                mensagem = `Lançamento de Notinha Branca%0A` +
+                    `Cod: ${cod}%0A` +
+                    `Nome: ${nome}%0A` +
+                    `Data: ${data}%0A` +
+                    `Valor: R$ ${valor}`;
+            }
+
+
+            let numeroDestino = "5534999630454";
+            let url = `https://api.whatsapp.com/send?phone=${numeroDestino}&text=${mensagem}`;
+            window.open(url, "_blank");
+
+        }
+    </script>
+</body>
+
+</html>
