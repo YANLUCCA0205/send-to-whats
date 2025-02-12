@@ -120,7 +120,7 @@
             document.getElementById("form-container").style.display = "block";
             if (tipo === 'cupom') {
                 document.getElementById("titulo-form").innerText = "Lançamento de Cupom";
-                document.querySelectorAll(".cupom").forEach(el => el.style.display = "block");
+                document.querySelectorAll(".cupom").forEach(el => el.style.display = "inline-block");
             } else {
                 document.getElementById("titulo-form").innerText = "Lançamento de Notinha Branca";
                 document.querySelectorAll(".cupom").forEach(el => el.style.display = "none");
@@ -129,7 +129,7 @@
 
         function formatarValor() {
             let valor = document.getElementById("valor");
-            if (valor.value) {
+            if (valor.value.trim() !== "") {
                 valor.value = parseFloat(valor.value).toFixed(2);
             }
         }
