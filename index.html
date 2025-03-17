@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Envio para WhatsApp</title>
     <style>
+        /* Fundo anterior e o efeito com o coração */
         body {
             font-family: Arial, sans-serif;
             display: flex;
@@ -14,8 +15,32 @@
             justify-content: center;
             height: 100vh;
             margin: 0;
-            background: url('./img/fundo_site_logo1.png') no-repeat center center fixed;
-            background-size: cover;
+            background: linear-gradient(135deg, rgba(0, 100, 255, 0.6) 0%, rgba(255, 0, 0, 0.6) 100%);
+            backdrop-filter: blur(10px);
+            position: relative;
+            /* Para a posição do coração */
+        }
+
+        /* Coração PNG responsivo */
+        .coracao {
+            position: absolute;
+            /* Para sobrepor o fundo */
+            top: 50%;
+            /* Centraliza o coração verticalmente */
+            left: 50%;
+            /* Centraliza o coração horizontalmente */
+            transform: translate(-50%, -50%);
+            /* Ajuste fino para centralização */
+            width: 55vw;
+            /* Tamanho do coração ajustável conforme o tamanho da tela */
+            max-width: 1300px;
+            /* Define um limite máximo para o tamanho */
+            height: auto;
+            /* Mantém a proporção */
+            opacity: 0.5;
+            /* Transparência para efeito sutil */
+            z-index: -1;
+            
         }
 
         h1 {
@@ -97,6 +122,9 @@
 </head>
 
 <body>
+    <!-- Coração PNG no fundo -->
+    <img src="./img/Coração 3d.png" alt="Coração" class="coracao">
+
     <h1>UNIÃO SUPERMERCADOS<br>LANÇAMENTO DE NOTAS</h1>
     <div class="button-group">
         <button onclick="mostrarFormulario('cupom')">Lançamento de Cupom</button>
