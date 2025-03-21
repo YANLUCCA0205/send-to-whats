@@ -40,7 +40,7 @@
             opacity: 0.5;
             /* Transparência para efeito sutil */
             z-index: -1;
-            
+
         }
 
         h1 {
@@ -49,33 +49,91 @@
             margin-bottom: 20px;
         }
 
+        h4 {
+            margin: 0 0;
+        }
+
         .button-group {
             display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
+            flex-direction: column;
+            align-items: center;
+            flex-wrap: wrap;
+            /* Permite melhor adaptação em telas menores */
+            justify-content: center;
+            /* Maior espaçamento entre os botões */
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .button-group button {
+            width: 20em;
+            ;
         }
 
         button {
-            padding: 10px 20px;
+
+            padding: 12px 25px;
+            /* Tamanho maior para mais conforto */
             border: none;
-            border-radius: 5px;
-            background-color: rgba(0, 100, 255, 0.8);
+            border-radius: 8px;
+            /* Bordas mais arredondadas */
+            background: linear-gradient(135deg, rgba(0, 100, 255, 0.8), rgba(0, 50, 200, 0.8));
+            /* Gradiente elegante */
             color: white;
+            font-size: 18px;
+            font-weight: bold;
             cursor: pointer;
-            transition: background 0.3s;
-            font-size: 16px;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         button:hover {
-            background-color: rgba(255, 0, 0, 0.8);
+            background: linear-gradient(135deg, rgba(255, 0, 0, 0.8), rgba(200, 0, 0, 0.8));
+            /* Efeito de mudança de cor no hover */
+            transform: scale(1.05);
+            /* Leve aumento para sensação de clique */
         }
 
-        .container {
-            background: white;
+        #back-button {
+            background: none;
+            color: white;
+            background-color: rgba(255, 85, 85, 0.8);
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            width: auto;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.3s ease-in-out;
+        }
+
+        #back-button:hover {
+            background-color: rgba(255, 20, 20, 0.8);
+            transform: scale(1.05);
+        }
+
+
+        .container-base {
+            backdrop-filter: blur(1px);
+            background-color: rgba(0, 0, 0, 0.4);
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            width: 320px;
+            width: 30%;
+            height: 60%;
+        }
+
+        .container {
+            align-items: center;
+            backdrop-filter: blur(30px);
+            background-color: rgba(0, 0, 0, 0.4);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 20%;
             display: none;
         }
 
@@ -124,33 +182,56 @@
 <body>
     <!-- Coração PNG no fundo -->
     <img src="./img/Coração 3d.png" alt="Coração" class="coracao">
-
-    <h1>UNIÃO SUPERMERCADOS<br>LANÇAMENTO DE NOTAS</h1>
-    <div class="button-group">
-        <button onclick="mostrarFormulario('cupom')">Lançamento de Cupom</button>
-        <button onclick="mostrarFormulario('notinha')">Lançamento de Notinha Branca</button>
-        <button onclick="mostrarFormulario('limite')">Aumento de Limite</button>
+    <div class="container-base" id="form-container-base">
+        <h1>UNIÃO SUPERMERCADOS LANÇAMENTO DE NOTAS</h1>
+        <div class="button-group">
+            <div><button onclick="mostrarFormulario('cupom')">Lançamento de Cupom</button></div>
+            <div><button onclick="mostrarFormulario('notinha')">Lançamento de Notinha Branca</button></div>
+            <div><button onclick="mostrarFormulario('limite')">Aumento de Limite</button></div>
+        </div>
     </div>
     <div class="container" id="form-container">
+        <button id="back-button" onclick="document.getElementById('form-container').style.display='none';
+            document.getElementById('form-container-base').style.display='block';">Voltar</button>
         <h2 id="titulo-form">Preencha os Dados</h2>
-        <input type="number" id="cod" placeholder="Cod">
+        <h4 id="cod_txt">Código:</h4>
+        <input type="number" id="cod" placeholder="Código">
+        <h4 id="nome_txt">Nome:</h4>
         <input type="text" id="nome" placeholder="Nome" pattern="[A-Za-zÀ-ÿ\s]+">
+        <h4 id="data_txt">Data:</h4>
         <input type="date" id="data">
-        <input type="number" id="coo" placeholder="Coo" class="cupom">
+        <h4 id="coo_txt">COO:</h4>
+        <input type="number" id="coo" placeholder="COO" class="cupom">
+        <h4 id="operadora_txt">Operadora:</h4>
         <input type="text" id="operadora" placeholder="Operadora" class="cupom" pattern="[A-Za-zÀ-ÿ\s]+">
+        <h4 id="ecf_txt">ECF:</h4>
         <input type="number" id="ecf" placeholder="Ecf" class="cupom" min="100" max="999">
+        <h4 id="valor_txt">Valor:</h4>
         <input type="number" step="0.01" id="valor" placeholder="Valor" onblur="formatarValor()">
-        <input type="text" id="email" placeholder="E-mail" class="aumento" style="display: none;">
+        <h4 id="email_txt">E-mail:</h4>
+        <input type="email" id="email" placeholder="E-mail" class="aumento" style="display: none;">
         <span id="error-ecf" class="error"></span>
         <button onclick="enviarWhatsApp()">Enviar</button>
     </div>
 
     <script>
         function mostrarFormulario(tipo) {
+
+            document.getElementById('form-container-base').style.display = "none";
+
             document.getElementById("form-container").style.display = "block";
             document.getElementById("email").style.display = "none"; // Sempre oculta o email antes de verificar o tipo
             document.getElementById("data").style.display = "inline-block";
             document.getElementById("ecf").style.display = "inline-block";
+
+            document.getElementById("email_txt").style.display = "none";
+            document.getElementById("operadora_txt").style.display = "inline-block";
+            document.getElementById("coo_txt").style.display = "inline-block";
+            document.getElementById("ecf_txt").style.display = "inline-block";
+
+
+
+
             if (tipo === 'cupom') {
                 document.getElementById("titulo-form").innerText = "Lançamento de Cupom";
                 document.querySelectorAll(".cupom").forEach(el => el.style.display = "inline-block");
@@ -158,13 +239,24 @@
                 if (tipo === 'notinha') {
                     document.getElementById("titulo-form").innerText = "Lançamento de Notinha Branca";
                     document.querySelectorAll(".cupom").forEach(el => el.style.display = "none");
-                } else {
-                    document.getElementById("titulo-form").innerText = "Aumento de Limite";
-                    document.querySelectorAll(".cupom").forEach(el => el.style.display = "none");
-                    document.getElementById("email").style.display = "inline-block";
+                    document.getElementById("operadora_txt").style.display = "none";
+                    document.getElementById("coo_txt").style.display = "none";
+                    document.getElementById("ecf_txt").style.display = "none";
+                    document.getElementById("data_txt").style.display = "inline";
 
-                    document.getElementById("data").style.display = "none";
-                    document.getElementById("ecf").style.display = "none";
+                } else {
+                    if (tipo === 'limite') {
+                        document.getElementById("titulo-form").innerText = "Aumento de Limite";
+                        document.querySelectorAll(".cupom").forEach(el => el.style.display = "none");
+                        document.getElementById("email").style.display = "inline";
+                        document.getElementById("data").style.display = "none";
+
+                        document.getElementById("operadora_txt").style.display = "none";
+                        document.getElementById("coo_txt").style.display = "none";
+                        document.getElementById("data_txt").style.display = "none";
+                        document.getElementById("ecf_txt").style.display = "none";
+                        document.getElementById("email_txt").style.display = "inline";
+                    }
                 }
             }
         }
