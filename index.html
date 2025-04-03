@@ -163,7 +163,7 @@
             margin-bottom: 15px;
         }
 
-        input {
+        input, select, textarea {
             width: calc(100% - 20px);
             padding: 10px;
             margin-bottom: 10px;
@@ -172,7 +172,8 @@
             font-size: 14px;
         }
 
-        input:focus {
+
+        input:focus, select:focus, textarea:focus {
             border-color: #007bff;
             outline: none;
         }
@@ -197,6 +198,29 @@
         .container button:hover {
             background-color: rgba(255, 0, 0, 0.8);
         }
+
+        /* Estilo para os botões de opção */
+        .opcoes-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .opcoes-buttons button {
+            flex: 1;
+            padding: 10px;
+            font-size: 14px;
+        }
+        
+        .opcional {
+            font-size: 12px;
+            color: #aaa;
+            margin-left: 5px;
+        }
+
+
+        
     </style>
 </head>
 
@@ -208,13 +232,20 @@
         <div class="button-group">
             <div><button onclick="mostrarFormulario('cupom')">Lançamento de Cupom</button></div>
             <div><button onclick="mostrarFormulario('notinha')">Lançamento de Notinha Branca</button></div>
-            <div><button onclick="mostrarFormulario('limite')">Aumento de Limite</button></div>
+            <div><button onclick="mostrarFormulario('atualizacao')">Atualização Cadastral</button></div>
         </div>
     </div>
     <div class="container" id="form-container">
         <button id="back-button" onclick="document.getElementById('form-container').style.display='none';
             document.getElementById('form-container-base').style.display='block';">Voltar</button>
         <h2 id="titulo-form">Preencha os Dados</h2>
+        
+        <!-- Botões side-by-side para Atualização Cadastral -->
+        <div class="opcoes-buttons" id="opcoes-atualizacao" style="display: none;">
+            <button id="btn-limite" onclick="selecionarOpcaoAtualizacao('limite')">Aumento de Limite</button>
+            <button id="btn-situacao" onclick="selecionarOpcaoAtualizacao('situacao')">Situação 70</button>
+        </div>
+        
         <h4 id="cod_txt">Código:</h4>
         <input type="number" id="cod" placeholder="Código">
         <h4 id="nome_txt">Nome:</h4>
@@ -231,54 +262,111 @@
         <input type="number" step="0.01" id="valor" placeholder="Valor" onblur="formatarValor()">
         <h4 id="email_txt">E-mail:</h4>
         <input type="email" id="email" placeholder="E-mail" class="aumento" style="display: none;">
+        <h4 id="situacao_opcao_txt" style="display: none;">Ação para Situação 70:</h4>
+        <select id="situacao_opcao" style="display: none;">
+            <option value="adicionar">Adicionar</option>
+            <option value="remover" selected>Remover</option>
+        </select>
+        <h4 id="observacao_txt" style="display: none;">Observação: <span class="opcional">(opcional)</span></h4>
+        <textarea id="observacao" placeholder="Observação (opcional)" rows="3" style="display: none;"></textarea>
         <span id="error-ecf" class="error"></span>
         <button onclick="enviarWhatsApp()">Enviar</button>
     </div>
 
     <script>
+        // Variável global para armazenar o tipo de atualização selecionado
+        let tipoAtualizacaoSelecionado = "limite"; // Padrão para aumento de limite
+        
         function mostrarFormulario(tipo) {
-
             document.getElementById('form-container-base').style.display = "none";
-
             document.getElementById("form-container").style.display = "block";
-            document.getElementById("email").style.display = "none"; // Sempre oculta o email antes de verificar o tipo
+            document.getElementById("email").style.display = "none";
             document.getElementById("data").style.display = "inline-block";
             document.getElementById("ecf").style.display = "inline-block";
+            document.getElementById("valor").style.display = "inline-block";
+            document.getElementById("opcoes-atualizacao").style.display = "none";
+            document.getElementById("situacao_opcao").style.display = "none";
+            document.getElementById("situacao_opcao_txt").style.display = "none";
+            document.getElementById("observacao").style.display = "none";
+            document.getElementById("observacao_txt").style.display = "none";
 
             document.getElementById("email_txt").style.display = "none";
             document.getElementById("operadora_txt").style.display = "inline-block";
             document.getElementById("coo_txt").style.display = "inline-block";
             document.getElementById("ecf_txt").style.display = "inline-block";
-
-
-
+            document.getElementById("valor_txt").style.display = "inline-block";
+            document.getElementById("data_txt").style.display = "inline-block";
 
             if (tipo === 'cupom') {
                 document.getElementById("titulo-form").innerText = "Lançamento de Cupom";
                 document.querySelectorAll(".cupom").forEach(el => el.style.display = "inline-block");
+                document.getElementById("observacao").style.display = "inline-block";
+                document.getElementById("observacao_txt").style.display = "inline-block";
+            } 
+            else if (tipo === 'notinha') {
+                document.getElementById("titulo-form").innerText = "Lançamento de Notinha Branca";
+                document.querySelectorAll(".cupom").forEach(el => el.style.display = "none");
+                document.getElementById("operadora_txt").style.display = "none";
+                document.getElementById("coo_txt").style.display = "none";
+                document.getElementById("ecf_txt").style.display = "none";
+                document.getElementById("observacao").style.display = "inline-block";
+                document.getElementById("observacao_txt").style.display = "inline-block";
+            } 
+            else if (tipo === 'atualizacao') {
+                document.getElementById("titulo-form").innerText = "Atualização Cadastral";
+                document.querySelectorAll(".cupom").forEach(el => el.style.display = "none");
+                document.getElementById("operadora_txt").style.display = "none";
+                document.getElementById("coo_txt").style.display = "none";
+                document.getElementById("ecf_txt").style.display = "none";
+                document.getElementById("data").style.display = "none";
+                document.getElementById("data_txt").style.display = "none";
+                
+                // Mostrar botões de opção para escolher o tipo de atualização
+                document.getElementById("opcoes-atualizacao").style.display = "flex";
+                
+                // Inicializar com opção padrão (limite)
+                tipoAtualizacaoSelecionado = "limite";
+                atualizarEstiloBotoesOpcao();
+                atualizarCamposAtualizacao();
+            }
+        }
+        
+        function selecionarOpcaoAtualizacao(tipo) {
+            tipoAtualizacaoSelecionado = tipo;
+            atualizarEstiloBotoesOpcao();
+            atualizarCamposAtualizacao();
+        }
+        
+        function atualizarEstiloBotoesOpcao() {
+            // Reseta ambos os botões
+            document.getElementById("btn-limite").style.background = "linear-gradient(135deg, rgba(0, 100, 255, 0.8), rgba(0, 50, 200, 0.8))";
+            document.getElementById("btn-situacao").style.background = "linear-gradient(135deg, rgba(0, 100, 255, 0.8), rgba(0, 50, 200, 0.8))";
+            
+            // Destaca o botão selecionado
+            if (tipoAtualizacaoSelecionado === "limite") {
+                document.getElementById("btn-limite").style.background = "linear-gradient(135deg, rgba(255, 0, 0, 0.8), rgba(200, 0, 0, 0.8))";
             } else {
-                if (tipo === 'notinha') {
-                    document.getElementById("titulo-form").innerText = "Lançamento de Notinha Branca";
-                    document.querySelectorAll(".cupom").forEach(el => el.style.display = "none");
-                    document.getElementById("operadora_txt").style.display = "none";
-                    document.getElementById("coo_txt").style.display = "none";
-                    document.getElementById("ecf_txt").style.display = "none";
-                    document.getElementById("data_txt").style.display = "inline";
-
-                } else {
-                    if (tipo === 'limite') {
-                        document.getElementById("titulo-form").innerText = "Aumento de Limite";
-                        document.querySelectorAll(".cupom").forEach(el => el.style.display = "none");
-                        document.getElementById("email").style.display = "inline";
-                        document.getElementById("data").style.display = "none";
-
-                        document.getElementById("operadora_txt").style.display = "none";
-                        document.getElementById("coo_txt").style.display = "none";
-                        document.getElementById("data_txt").style.display = "none";
-                        document.getElementById("ecf_txt").style.display = "none";
-                        document.getElementById("email_txt").style.display = "inline";
-                    }
-                }
+                document.getElementById("btn-situacao").style.background = "linear-gradient(135deg, rgba(255, 0, 0, 0.8), rgba(200, 0, 0, 0.8))";
+            }
+        }
+        
+        function atualizarCamposAtualizacao() {
+            if (tipoAtualizacaoSelecionado === "limite") {
+                // Campos para Aumento de Limite
+                document.getElementById("email").style.display = "inline-block";
+                document.getElementById("email_txt").style.display = "inline-block";
+                document.getElementById("valor").style.display = "inline-block";
+                document.getElementById("valor_txt").style.display = "inline-block";
+                document.getElementById("situacao_opcao").style.display = "none";
+                document.getElementById("situacao_opcao_txt").style.display = "none";
+            } else {
+                // Campos para Situação 70
+                document.getElementById("email").style.display = "none";
+                document.getElementById("email_txt").style.display = "none";
+                document.getElementById("valor").style.display = "none";
+                document.getElementById("valor_txt").style.display = "none";
+                document.getElementById("situacao_opcao").style.display = "inline-block";
+                document.getElementById("situacao_opcao_txt").style.display = "inline-block";
             }
         }
 
@@ -304,6 +392,8 @@
             let email = document.getElementById("email").value;
             let coo = document.getElementById("coo").value;
             let operadora = document.getElementById("operadora").value;
+            let situacaoOpcao = document.getElementById("situacao_opcao").value;
+            let observacao = document.getElementById("observacao").value;
 
             // Armazena o título do formulário
             let tituloForm = document.getElementById("titulo-form").innerText;
@@ -312,16 +402,22 @@
             let isFormValid = true;
 
             if (tituloForm === "Lançamento de Cupom") {
-                if (!cod || !nome || !data || !coo || !operadora || !ecf || !valor) {
+                if (!cod || !nome || !dataInput || !coo || !operadora || !ecf || !valor) {
                     isFormValid = false;
                 }
             } else if (tituloForm === "Lançamento de Notinha Branca") {
-                if (!cod || !nome || !data || !valor) {
+                if (!cod || !nome || !dataInput || !valor) {
                     isFormValid = false;
                 }
-            } else if (tituloForm === "Aumento de Limite") {
-                if (!cod || !nome || !email || !valor) {
-                    isFormValid = false;
+            } else if (tituloForm === "Atualização Cadastral") {
+                if (tipoAtualizacaoSelecionado === "limite") {
+                    if (!cod || !nome || !email || !valor) {
+                        isFormValid = false;
+                    }
+                } else { // situacao 70
+                    if (!cod || !nome) {
+                        isFormValid = false;
+                    }
                 }
             }
 
@@ -350,29 +446,44 @@
                     `Operadora: ${operadora}%0A` +
                     `Ecf: ${ecf}%0A` +
                     `Valor: R$ ${valor}`;
+                
+                // Adiciona a observação se estiver preenchida
+                if (observacao.trim() !== "") {
+                    mensagem += `%0AObservação: ${observacao}`;
+                }
             } else if (tituloForm === "Lançamento de Notinha Branca") {
                 mensagem = `Lançamento de Notinha Branca%0A` +
                     `Cod: ${cod}%0A` +
                     `Nome: ${nome}%0A` +
                     `Data: ${dataFormatada}%0A` +
                     `Valor: R$ ${valor}`;
-            } else if (tituloForm === "Aumento de Limite") {
-                mensagem = `Aumento de Limite%0A` +
-                    `Cod: ${cod}%0A` +
-                    `Nome: ${nome}%0A` +
-                    `Valor: R$ ${valor}%0A` +
-                    `E-mail: ${email}`;
+                
+                // Adiciona a observação se estiver preenchida
+                if (observacao.trim() !== "") {
+                    mensagem += `%0AObservação: ${observacao}`;
+                }
+            } else if (tituloForm === "Atualização Cadastral") {
+                if (tipoAtualizacaoSelecionado === "limite") {
+                    mensagem = `Aumento de Limite%0A` +
+                        `Cod: ${cod}%0A` +
+                        `Nome: ${nome}%0A` +
+                        `Valor: R$ ${valor}%0A` +
+                        `E-mail: ${email}`;
+                } else { // situacao 70
+                    let acaoSituacao = situacaoOpcao === "adicionar" ? "Adicionar" : "Remover";
+                    mensagem = `${acaoSituacao} Situação 70%0A` +
+                        `Cod: ${cod}%0A` +
+                        `Nome: ${nome}`;
+                }
             }
 
             // URL do WhatsApp com a mensagem formatada
             let numeroTelefone = "553433210639"; // Telefone do usb-Y.bot
             let url = `https://wa.me/${numeroTelefone}?text=${mensagem}`;
 
-
             // Abrir o WhatsApp com a mensagem pronta
             window.open(url, "_blank");
         }
-
     </script>
 </body>
 
