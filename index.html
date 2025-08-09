@@ -16,32 +16,49 @@
             justify-content: center;
             height: 100vh;
             margin: 0;
-            background: linear-gradient(135deg, rgba(0, 100, 255, 0.6) 0%, rgba(255, 0, 0, 0.6) 100%);
-            backdrop-filter: blur(10px);
             position: relative;
             /* Para a posição do coração */
         }
 
-        /* Coração PNG responsivo */
-        .coracao {
-            position: absolute;
-            /* Para sobrepor o fundo */
-            top: 50%;
-            /* Centraliza o coração verticalmente */
-            left: 50%;
-            /* Centraliza o coração horizontalmente */
-            transform: translate(-50%, -50%);
-            /* Ajuste fino para centralização */
-            width: 55vw;
-            /* Tamanho do coração ajustável conforme o tamanho da tela */
-            max-width: 1300px;
-            /* Define um limite máximo para o tamanho */
-            height: auto;
-            /* Mantém a proporção */
-            opacity: 0.5;
-            /* Transparência para efeito sutil */
-            z-index: -1;
+        /* Estilo para o botão de login no canto superior direito */
+        .button-login {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
 
+        .button-login button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(135deg, rgba(0, 100, 255, 0.9), rgba(0, 50, 200, 0.9));
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .button-login button:hover {
+            background: linear-gradient(135deg, rgba(255, 0, 0, 0.9), rgba(200, 0, 0, 0.9));
+            transform: scale(1.05);
+        }
+
+        /* Imagem de fundo responsiva */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('./img/FUNDO\ LOGIN.webp');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            z-index: -1;
         }
 
         h1 {
@@ -163,7 +180,9 @@
             margin-bottom: 15px;
         }
 
-        input, select, textarea {
+        input,
+        select,
+        textarea {
             width: calc(100% - 20px);
             padding: 10px;
             margin-bottom: 10px;
@@ -173,7 +192,9 @@
         }
 
 
-        input:focus, select:focus, textarea:focus {
+        input:focus,
+        select:focus,
+        textarea:focus {
             border-color: #007bff;
             outline: none;
         }
@@ -200,6 +221,8 @@
         }
 
         /* Estilo para os botões de opção */
+        
+
         .opcoes-buttons {
             display: flex;
             justify-content: space-between;
@@ -212,21 +235,20 @@
             padding: 10px;
             font-size: 14px;
         }
-        
+
         .opcional {
             font-size: 12px;
             color: #aaa;
             margin-left: 5px;
         }
-
-
-        
     </style>
 </head>
 
 <body>
-    <!-- Coração PNG no fundo -->
-    <img src="./img/Coração 3d.webp" alt="Coração" class="coracao">
+    <div class="button-login">
+        <a href="login.html"><button>LOGIN</button></a>
+    </div>
+    <!-- Imagem de fundo toda -->
     <div class="container-base" id="form-container-base">
         <h1>UNIÃO SUPERMERCADOS LANÇAMENTO DE NOTAS</h1>
         <div class="button-group">
@@ -239,13 +261,13 @@
         <button id="back-button" onclick="document.getElementById('form-container').style.display='none';
             document.getElementById('form-container-base').style.display='block';">Voltar</button>
         <h2 id="titulo-form">Preencha os Dados</h2>
-        
+
         <!-- Botões side-by-side para Atualização Cadastral -->
         <div class="opcoes-buttons" id="opcoes-atualizacao" style="display: none;">
             <button id="btn-limite" onclick="selecionarOpcaoAtualizacao('limite')">Aumento de Limite</button>
             <button id="btn-situacao" onclick="selecionarOpcaoAtualizacao('situacao')">Situação 70</button>
         </div>
-        
+
         <h4 id="cod_txt">Código:</h4>
         <input type="number" id="cod" placeholder="Código">
         <h4 id="nome_txt">Nome:</h4>
@@ -276,7 +298,7 @@
     <script>
         // Variável global para armazenar o tipo de atualização selecionado
         let tipoAtualizacaoSelecionado = "limite"; // Padrão para aumento de limite
-        
+
         function mostrarFormulario(tipo) {
             document.getElementById('form-container-base').style.display = "none";
             document.getElementById("form-container").style.display = "block";
@@ -302,7 +324,7 @@
                 document.querySelectorAll(".cupom").forEach(el => el.style.display = "inline-block");
                 document.getElementById("observacao").style.display = "inline-block";
                 document.getElementById("observacao_txt").style.display = "inline-block";
-            } 
+            }
             else if (tipo === 'notinha') {
                 document.getElementById("titulo-form").innerText = "Lançamento de Notinha Branca";
                 document.querySelectorAll(".cupom").forEach(el => el.style.display = "none");
@@ -311,7 +333,7 @@
                 document.getElementById("ecf_txt").style.display = "none";
                 document.getElementById("observacao").style.display = "inline-block";
                 document.getElementById("observacao_txt").style.display = "inline-block";
-            } 
+            }
             else if (tipo === 'atualizacao') {
                 document.getElementById("titulo-form").innerText = "Atualização Cadastral";
                 document.querySelectorAll(".cupom").forEach(el => el.style.display = "none");
@@ -320,28 +342,28 @@
                 document.getElementById("ecf_txt").style.display = "none";
                 document.getElementById("data").style.display = "none";
                 document.getElementById("data_txt").style.display = "none";
-                
+
                 // Mostrar botões de opção para escolher o tipo de atualização
                 document.getElementById("opcoes-atualizacao").style.display = "flex";
-                
+
                 // Inicializar com opção padrão (limite)
                 tipoAtualizacaoSelecionado = "limite";
                 atualizarEstiloBotoesOpcao();
                 atualizarCamposAtualizacao();
             }
         }
-        
+
         function selecionarOpcaoAtualizacao(tipo) {
             tipoAtualizacaoSelecionado = tipo;
             atualizarEstiloBotoesOpcao();
             atualizarCamposAtualizacao();
         }
-        
+
         function atualizarEstiloBotoesOpcao() {
             // Reseta ambos os botões
             document.getElementById("btn-limite").style.background = "linear-gradient(135deg, rgba(0, 100, 255, 0.8), rgba(0, 50, 200, 0.8))";
             document.getElementById("btn-situacao").style.background = "linear-gradient(135deg, rgba(0, 100, 255, 0.8), rgba(0, 50, 200, 0.8))";
-            
+
             // Destaca o botão selecionado
             if (tipoAtualizacaoSelecionado === "limite") {
                 document.getElementById("btn-limite").style.background = "linear-gradient(135deg, rgba(255, 0, 0, 0.8), rgba(200, 0, 0, 0.8))";
@@ -349,7 +371,7 @@
                 document.getElementById("btn-situacao").style.background = "linear-gradient(135deg, rgba(255, 0, 0, 0.8), rgba(200, 0, 0, 0.8))";
             }
         }
-        
+
         function atualizarCamposAtualizacao() {
             if (tipoAtualizacaoSelecionado === "limite") {
                 // Campos para Aumento de Limite
@@ -446,7 +468,7 @@
                     `Operadora: ${operadora}%0A` +
                     `Ecf: ${ecf}%0A` +
                     `Valor: R$ ${valor}`;
-                
+
                 // Adiciona a observação se estiver preenchida
                 if (observacao.trim() !== "") {
                     mensagem += `%0AObservação: ${observacao}`;
@@ -457,7 +479,7 @@
                     `Nome: ${nome}%0A` +
                     `Data: ${dataFormatada}%0A` +
                     `Valor: R$ ${valor}`;
-                
+
                 // Adiciona a observação se estiver preenchida
                 if (observacao.trim() !== "") {
                     mensagem += `%0AObservação: ${observacao}`;
