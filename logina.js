@@ -159,17 +159,20 @@ style.textContent = `
 
   /* Responsividade */
   @media (max-width: 768px) {
-    .container {
-      justify-content: center;
-      padding-right: 20px;
-      padding-left: 20px;
-    }
-    
-    .login-box {
-      width: 90%;
-      padding: 30px;
-    }
+  .container {
+    justify-content: center;
+    padding-right: 20px;
+    padding-left: 20px;
+    background-image: url('./img/fundo_login1.png') !important;
   }
+  
+  .login-box {
+    width: 90%;
+    padding: 30px;
+    margin: 0 auto; /* centraliza horizontalmente */
+  }
+}
+
+
 `;
 document.head.appendChild(style);
-

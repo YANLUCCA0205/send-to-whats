@@ -17,7 +17,6 @@
             height: 100vh;
             margin: 0;
             position: relative;
-            /* Para a posição do coração */
         }
 
         /* Estilo para o botão de login no canto superior direito */
@@ -54,7 +53,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: url('./img/FUNDO\ LOGIN.webp');
+            background-image: url('./img/FUNDO LOGIN.webp');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -76,34 +75,23 @@
             flex-direction: column;
             align-items: center;
             flex-wrap: wrap;
-            /* Permite melhor adaptação em telas menores */
             justify-content: center;
-            /* Maior espaçamento entre os botões */
             gap: 20px;
             margin-top: 20px;
         }
 
         .button-group button {
             width: 30vw;
-            /* Tamanho do coração ajustável conforme o tamanho da tela */
             max-width: 1300px;
-            /* Define um limite máximo para o tamanho */
             min-width: 280px;
-            /* Define um limite mínimo para o tamanho */
             height: auto;
-            /* Mantém a proporção */
-            ;
         }
 
         button {
-
             padding: 12px 25px;
-            /* Tamanho maior para mais conforto */
             border: none;
             border-radius: 8px;
-            /* Bordas mais arredondadas */
             background: linear-gradient(135deg, rgba(0, 100, 255, 0.8), rgba(0, 50, 200, 0.8));
-            /* Gradiente elegante */
             color: white;
             font-size: 18px;
             font-weight: bold;
@@ -114,9 +102,7 @@
 
         button:hover {
             background: linear-gradient(135deg, rgba(255, 0, 0, 0.8), rgba(200, 0, 0, 0.8));
-            /* Efeito de mudança de cor no hover */
             transform: scale(1.05);
-            /* Leve aumento para sensação de clique */
         }
 
         #back-button {
@@ -139,7 +125,6 @@
             transform: scale(1.05);
         }
 
-
         .container-base {
             backdrop-filter: blur(1px);
             background-color: rgba(0, 0, 0, 0.4);
@@ -147,13 +132,9 @@
             border-radius: 8px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             width: 35vw;
-            /* Tamanho do coração ajustável conforme o tamanho da tela */
             max-width: 1300px;
-            /* Define um limite máximo para o tamanho */
             min-width: 300px;
-            /* Define um limite mínimo para o tamanho */
             height: auto;
-            /* Mantém a proporção */
         }
 
         .container {
@@ -165,13 +146,9 @@
             border-radius: 8px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             width: 30vw;
-            /* Tamanho do coração ajustável conforme o tamanho da tela */
             max-width: 1300px;
-            /* Define um limite máximo para o tamanho */
             min-width: 300px;
-            /* Define um limite mínimo para o tamanho */
             height: auto;
-            /* Mantém a proporção */
             display: none;
         }
 
@@ -190,7 +167,6 @@
             border-radius: 5px;
             font-size: 14px;
         }
-
 
         input:focus,
         select:focus,
@@ -220,9 +196,6 @@
             background-color: rgba(255, 0, 0, 0.8);
         }
 
-        /* Estilo para os botões de opção */
-        
-
         .opcoes-buttons {
             display: flex;
             justify-content: space-between;
@@ -240,6 +213,13 @@
             font-size: 12px;
             color: #aaa;
             margin-left: 5px;
+        }
+
+        /* Alterar imagem de fundo no mobile */
+        @media (max-width: 768px) {
+            body::before {
+                background-image: url('./img/fundo_login1.png') !important;
+            }
         }
     </style>
 </head>
