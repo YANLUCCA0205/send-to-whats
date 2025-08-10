@@ -1,10 +1,9 @@
 // login.js
-
 document.body.style.margin = "0";
 document.body.style.fontFamily = "Arial, sans-serif";
 document.body.style.backgroundColor = "#0d0d0d";
 document.body.style.height = "100vh";
-document.body.style.overflow = "hidden";
+document.body.style.overflowX = "hidden"; // Evita scroll lateral desnecessário
 
 // HTML
 document.body.innerHTML = `
@@ -32,6 +31,10 @@ document.body.innerHTML = `
         <span class="signup-text">Don't have an account? </span>
         <a href="#" class="signup-link">Sign up</a>
       </div>
+
+      <div class="signup-section">
+        <a href="http://localhost/code/Send_To_WhatsApp/" class="signup-link">Voltar a página anterior</a>
+      </div>
     </div>
   </div>
 `;
@@ -54,10 +57,7 @@ style.textContent = `
 
   .login-box {
     background-color: rgba(0, 0, 0, 0.8);
-    padding-top: 85px;
-    padding-right: 40px;
-    padding-left: 40px;
-    padding-bottom: 85px;
+    padding: 85px 40px;
     border-radius: 10px;
     box-shadow: 0 0 20px rgba(0,0,0,0.8);
     text-align: left;
@@ -66,14 +66,13 @@ style.textContent = `
     z-index: 2;
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    margin-left: 40%;
+    margin-left: 40%; /* deslocado no PC */
     margin-right: 20%;
   }
 
   .login-box h2 {
     color: #fff;
     margin-bottom: 30px;
-    font-family: Arial, sans-serif;
     font-size: 32px;
     font-weight: 300;
     text-align: center;
@@ -159,20 +158,18 @@ style.textContent = `
 
   /* Responsividade */
   @media (max-width: 768px) {
-  .container {
-    justify-content: center;
-    padding-right: 20px;
-    padding-left: 20px;
-    background-image: url('./img/fundo_login1.png') !important;
-  }
-  
-  .login-box {
-    width: 90%;
-    padding: 30px;
-    margin: 0 auto; /* centraliza horizontalmente */
-  }
-}
+    .container {
+      justify-content: center;
+      padding: 0 20px;
+      background-image: url('./img/fundo_login1.webp') !important;
+      width: 90%;
+    }
+    
+    .login-box {
 
-
+      padding: 30px;
+      margin: 0 auto; /* centraliza no mobile */
+    }
+  }
 `;
 document.head.appendChild(style);
